@@ -70,10 +70,15 @@ jobs:
           echo "/etc/xcompile/sparc/bin" >> $GITHUB_ENV
           echo "/etc/xcompile/x86_64/bin" >> $GITHUB_ENV
 
+      - name: Set PATH for current session
+        run: |
+          PATH="/etc/xcompile/armv4l/bin:/etc/xcompile/armv5l/bin:/etc/xcompile/armv6l/bin:/etc/xcompile/i586/bin:/etc/xcompile/i686/bin:/etc/xcompile/m68k/bin:/etc/xcompile/mips/bin:/etc/xcompile/mipsel/bin:/etc/xcompile/powerpc/bin:/etc/xcompile/sh4/bin:/etc/xcompile/sparc/bin:/etc/xcompile/x86_64/bin:$PATH"
+          echo "PATH is now: $PATH"
+
       - name: Verify cross-compilers
         run: |
           ls -la /etc/xcompile/*/bin
-          echo "PATH is $PATH"
+          echo "Current PATH is: $PATH"
 
       - name: Install Go dependencies
         run: |
