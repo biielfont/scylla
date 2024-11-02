@@ -23,7 +23,7 @@ jobs:
       - name: Install cross-compilers
         run: |
           sudo mkdir /etc/xcompile
-          sudo cd /etc/xcompile
+          cd /etc/xcompile
           sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv4l.tar.gz
           sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv5l.tar.gz
           sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv6l.tar.gz
