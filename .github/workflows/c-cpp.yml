@@ -21,39 +21,39 @@ jobs:
           sudo apt-get install -y gcc g++ make golang wget tar
 
             - name: Install cross-compilers
-        run: |
-          sudo mkdir -p /etc/xcompile
-          cd /etc/xcompile
-          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv4l.tar.gz
-          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv5l.tar.gz
-          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv6l.tar.gz
-          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-i586.tar.gz
-          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-i686.tar.gz
-          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-m68k.tar.gz
-          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-mips.tar.gz
-          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-mipsel.tar.gz
-          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-powerpc.tar.gz
-          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-sh4.tar.gz
-          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-sparc.tar.gz
-          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-x86_64.tar.gz
+              run: |
+                sudo mkdir -p /etc/xcompile
+                cd /etc/xcompile
+                sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv4l.tar.gz
+                sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv5l.tar.gz
+                sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv6l.tar.gz
+                sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-i586.tar.gz
+                sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-i686.tar.gz
+                sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-m68k.tar.gz
+                sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-mips.tar.gz
+                sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-mipsel.tar.gz
+                sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-powerpc.tar.gz
+                sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-sh4.tar.gz
+                sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-sparc.tar.gz
+                sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-x86_64.tar.gz
+            
+                for file in *.tar.gz; do
+                  sudo tar -xf "$file"
+                  sudo rm "$file"
+                done
       
-          for file in *.tar.gz; do
-            sudo tar -xf "$file"
-            sudo rm "$file"
-          done
-
-          # Clear target directories before moving
-          sudo rm -rf /etc/xcompile/*
-
-          # Move extracted cross-compilers if they exist
-          for dir in cross-compiler-*; do
-            if [ -d "$dir" ]; then
-              sudo mv "$dir/"* /etc/xcompile/
-              sudo rm -rf "$dir"
-            else
-              echo "Warning: Directory $dir does not exist."
-            fi
-          done
+                # Clear target directories before moving
+                sudo rm -rf /etc/xcompile/*
+      
+                # Move extracted cross-compilers if they exist
+                for dir in cross-compiler-*; do
+                  if [ -d "$dir" ]; then
+                    sudo mv "$dir/"* /etc/xcompile/
+                    sudo rm -rf "$dir"
+                  else
+                    echo "Warning: Directory $dir does not exist."
+                  fi
+                done
 
       - name: Update PATH for cross-compilers
         run: |
