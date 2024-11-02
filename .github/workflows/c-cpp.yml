@@ -61,21 +61,6 @@ jobs:
           ls -la /etc/xcompile
           ls -la /etc/xcompile/*/bin || echo "No bin directories found"
 
-      - name: Update PATH for cross-compilers
-        run: |
-          echo "/etc/xcompile/armv4l/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/armv5l/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/armv6l/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/i586/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/i686/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/m68k/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/mips/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/mipsel/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/powerpc/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/sh4/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/sparc/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/x86_64/bin" >> $GITHUB_ENV
-
       - name: Install Go dependencies
         run: |
           cd cnc
@@ -89,7 +74,7 @@ jobs:
           BUILD_MODE: release
           BUILD_TYPE: telnet
         run: |
-          # Add cross-compiler paths to PATH before compilation
+          # Directly export the PATH for this step
           export PATH=$PATH:/etc/xcompile/armv4l/bin:/etc/xcompile/armv5l/bin:/etc/xcompile/armv6l/bin:/etc/xcompile/i586/bin:/etc/xcompile/i686/bin:/etc/xcompile/m68k/bin:/etc/xcompile/mips/bin:/etc/xcompile/mipsel/bin:/etc/xcompile/powerpc/bin:/etc/xcompile/sh4/bin:/etc/xcompile/sparc/bin:/etc/xcompile/x86_64/bin
 
           mkdir -p release debug
