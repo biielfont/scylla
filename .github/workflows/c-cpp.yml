@@ -55,26 +55,6 @@ jobs:
             fi
           done
 
-      - name: Update PATH for cross-compilers
-        run: |
-          echo "/etc/xcompile/armv4l/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/armv5l/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/armv6l/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/i586/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/i686/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/m68k/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/mips/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/mipsel/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/powerpc/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/sh4/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/sparc/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/x86_64/bin" >> $GITHUB_ENV
-
-      - name: Set PATH for current session
-        run: |
-          PATH="/etc/xcompile/armv4l/bin:/etc/xcompile/armv5l/bin:/etc/xcompile/armv6l/bin:/etc/xcompile/i586/bin:/etc/xcompile/i686/bin:/etc/xcompile/m68k/bin:/etc/xcompile/mips/bin:/etc/xcompile/mipsel/bin:/etc/xcompile/powerpc/bin:/etc/xcompile/sh4/bin:/etc/xcompile/sparc/bin:/etc/xcompile/x86_64/bin:$PATH"
-          echo "PATH is now: $PATH"
-
       - name: Verify cross-compilers
         run: |
           ls -la /etc/xcompile/*/bin
@@ -93,6 +73,9 @@ jobs:
           BUILD_MODE: release
           BUILD_TYPE: telnet
         run: |
+          # Update the PATH variable for the compilation step
+          export PATH=$PATH:/etc/xcompile/armv4l/bin:/etc/xcompile/armv5l/bin:/etc/xcompile/armv6l/bin:/etc/xcompile/i586/bin:/etc/xcompile/i686/bin:/etc/xcompile/m68k/bin:/etc/xcompile/mips/bin:/etc/xcompile/mipsel/bin:/etc/xcompile/powerpc/bin:/etc/xcompile/sh4/bin:/etc/xcompile/sparc/bin:/etc/xcompile/x86_64/bin
+
           mkdir -p release debug
 
           compile_bot() {
