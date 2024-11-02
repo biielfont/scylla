@@ -20,7 +20,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gcc g++ make golang wget tar
 
-      - name: Install cross-compilers
+            - name: Install cross-compilers
         run: |
           sudo mkdir -p /etc/xcompile
           cd /etc/xcompile
@@ -45,9 +45,15 @@ jobs:
           # Clear target directories before moving
           sudo rm -rf /etc/xcompile/*
 
-          # Move extracted cross-compilers
-          sudo mv cross-compiler-*/* /etc/xcompile/
-          sudo rm -rf cross-compiler-*
+          # Move extracted cross-compilers if they exist
+          for dir in cross-compiler-*; do
+            if [ -d "$dir" ]; then
+              sudo mv "$dir/"* /etc/xcompile/
+              sudo rm -rf "$dir"
+            else
+              echo "Warning: Directory $dir does not exist."
+            fi
+          done
 
       - name: Update PATH for cross-compilers
         run: |
