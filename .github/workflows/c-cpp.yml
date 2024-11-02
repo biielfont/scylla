@@ -22,29 +22,40 @@ jobs:
 
       - name: Install cross-compilers
         run: |
-          sudo mkdir /etc/xcompile
+          sudo mkdir -p /etc/xcompile
           cd /etc/xcompile
-          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv4l.tar.gz
-          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv5l.tar.gz
-          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv6l.tar.gz
-          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-i586.tar.gz
-          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-i686.tar.gz
-          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-m68k.tar.gz
-          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-mips.tar.gz
-          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-mipsel.tar.gz
-          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-powerpc.tar.gz
-          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-sh4.tar.gz
-          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-sparc.tar.gz
-          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-x86_64.tar.gz
-
+          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv4l.tar.gz
+          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv5l.tar.gz
+          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv6l.tar.gz
+          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-i586.tar.gz
+          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-i686.tar.gz
+          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-m68k.tar.gz
+          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-mips.tar.gz
+          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-mipsel.tar.gz
+          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-powerpc.tar.gz
+          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-sh4.tar.gz
+          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-sparc.tar.gz
+          sudo wget -q https://landley.net/aboriginal/downloads/binaries/cross-compiler-x86_64.tar.gz
+      
           for file in *.tar.gz; do
             sudo tar -xf "$file"
             sudo rm "$file"
           done
-
+    
+          # Clear target directories before moving
+          sudo rm -rf /etc/xcompile/bin/*
+          sudo rm -rf /etc/xcompile/c++/*
+          sudo rm -rf /etc/xcompile/cc/*
+          sudo rm -rf /etc/xcompile/host/*
+          sudo rm -rf /etc/xcompile/include/*
+          sudo rm -rf /etc/xcompile/lib/*
+          sudo rm -rf /etc/xcompile/man/*
+          sudo rm -rf /etc/xcompile/src/*
+          sudo rm -rf /etc/xcompile/tools/*
+      
           sudo mv cross-compiler-*/* /etc/xcompile/
           sudo rm -rf cross-compiler-*
-
+          
       - name: Update PATH for cross-compilers
         run: |
           sudo echo "/etc/xcompile/armv4l/bin" >> $GITHUB_ENV
