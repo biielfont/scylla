@@ -5,7 +5,7 @@ import (
     "net"
     "time"
     "strings"
-    "io/ioutil"
+   _ "io/ioutil" // Unused import?
     "strconv"
 )
 
