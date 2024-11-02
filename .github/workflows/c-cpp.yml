@@ -23,42 +23,42 @@ jobs:
       - name: Install cross-compilers
         run: |
           sudo mkdir /etc/xcompile
-          cd /etc/xcompile
-          wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv4l.tar.gz
-          wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv5l.tar.gz
-          wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv6l.tar.gz
-          wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-i586.tar.gz
-          wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-i686.tar.gz
-          wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-m68k.tar.gz
-          wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-mips.tar.gz
-          wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-mipsel.tar.gz
-          wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-powerpc.tar.gz
-          wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-sh4.tar.gz
-          wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-sparc.tar.gz
-          wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-x86_64.tar.gz
+          sudo cd /etc/xcompile
+          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv4l.tar.gz
+          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv5l.tar.gz
+          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-armv6l.tar.gz
+          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-i586.tar.gz
+          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-i686.tar.gz
+          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-m68k.tar.gz
+          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-mips.tar.gz
+          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-mipsel.tar.gz
+          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-powerpc.tar.gz
+          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-sh4.tar.gz
+          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-sparc.tar.gz
+          sudo wget https://landley.net/aboriginal/downloads/binaries/cross-compiler-x86_64.tar.gz
 
           for file in *.tar.gz; do
-            tar -xf "$file"
-            rm "$file"
+            sudo tar -xf "$file"
+            sudo rm "$file"
           done
 
-          mv cross-compiler-*/* /etc/xcompile/
-          rm -rf cross-compiler-*
+          sudo mv cross-compiler-*/* /etc/xcompile/
+          sudo rm -rf cross-compiler-*
 
       - name: Update PATH for cross-compilers
         run: |
-          echo "/etc/xcompile/armv4l/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/armv5l/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/armv6l/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/i586/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/i686/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/m68k/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/mips/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/mipsel/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/powerpc/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/sh4/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/sparc/bin" >> $GITHUB_ENV
-          echo "/etc/xcompile/x86_64/bin" >> $GITHUB_ENV
+          sudo echo "/etc/xcompile/armv4l/bin" >> $GITHUB_ENV
+          sudo echo "/etc/xcompile/armv5l/bin" >> $GITHUB_ENV
+          sudo echo "/etc/xcompile/armv6l/bin" >> $GITHUB_ENV
+          sudo echo "/etc/xcompile/i586/bin" >> $GITHUB_ENV
+          sudo echo "/etc/xcompile/i686/bin" >> $GITHUB_ENV
+          sudo echo "/etc/xcompile/m68k/bin" >> $GITHUB_ENV
+          sudo echo "/etc/xcompile/mips/bin" >> $GITHUB_ENV
+          sudo echo "/etc/xcompile/mipsel/bin" >> $GITHUB_ENV
+          sudo echo "/etc/xcompile/powerpc/bin" >> $GITHUB_ENV
+          sudo echo "/etc/xcompile/sh4/bin" >> $GITHUB_ENV
+          sudo echo "/etc/xcompile/sparc/bin" >> $GITHUB_ENV
+          sudo echo "/etc/xcompile/x86_64/bin" >> $GITHUB_ENV
 
       - name: Install Go dependencies
         run: |
